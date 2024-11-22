@@ -11,4 +11,9 @@
     <PackageReference Include="Microsoft.Data.SQLite" Version="8.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="db\Tienda.db">
+    <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>

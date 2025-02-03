@@ -27,8 +27,7 @@ public class ProductosController : Controller
     [HttpPost]
     public IActionResult CrearProducto(Productos productoNuevo)
     {
-        productoNuevo.IdProducto = productos.Count() + 1;
-        productos.Add(productoNuevo);
+        productosRep.CreateProducto(productoNuevo);
         return RedirectToAction("Index");
     }
 }

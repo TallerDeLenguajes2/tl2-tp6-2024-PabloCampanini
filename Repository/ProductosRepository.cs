@@ -33,7 +33,7 @@ public class ProductosRepository
     public void UpdateProducto(int idBuscado, Productos producto)
     {
         string queryString = "UPDATE Productos " +
-                             "SET Descripcion = @Descripcion " +
+                             "SET Descripcion = @Descripcion, Precio = @Precio " +
                              "WHERE idProducto = @idBuscado";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
@@ -43,6 +43,7 @@ public class ProductosRepository
             connection.Open();
 
             command.Parameters.Add(new SqliteParameter("@Descripcion", producto.Descripcion));
+            command.Parameters.Add(new SqliteParameter("@Precio", producto.Precio));
             command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
 
             command.ExecuteNonQuery();

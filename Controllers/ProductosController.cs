@@ -15,7 +15,7 @@ public class ProductosController : Controller
 
     public IActionResult Index()
     {
-        return View(productosRep.GetAllProductos());
+        return View(productos);
     }
 
     [HttpGet]

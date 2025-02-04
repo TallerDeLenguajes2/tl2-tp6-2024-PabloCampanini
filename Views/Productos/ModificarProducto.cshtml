@@ -1,10 +1,10 @@
 @{
-    ViewData["title"] = "Modificar producto";
+    ViewData["title"] = "Modificar Producto"
 }
 
 @model Productos
 
-<form asp-controller="Productos" asp-action="ModificarProducto">
+<form asp-controller="Producto" asp-action="EditarProducto">
     <input hidden asp-for="@Model.IdProducto">
     <section class="form-group">
         <label asp-for="@Model.Descripcion"></label>

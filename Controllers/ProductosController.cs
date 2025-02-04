@@ -36,13 +36,13 @@ public class ProductosController : Controller
     [HttpGet]
     public IActionResult ModificarProducto(int idBuscado)
     {
-        return View(productos.FirstOrDefault(product => product.IdProducto == idBuscado));
+        return View(productos.FirstOrDefault(prod => prod.IdProducto == idBuscado));
     }
 
     [HttpPost]
-    public IActionResult ModificarProducto(Productos prodModificado)
+    public IActionResult ModificarProducto(Productos productoBuscado)
     {
-        productosRep.UpdateProducto(prodModificado.IdProducto, prodModificado);
+        productosRep.UpdateProducto(productoBuscado.IdProducto, productoBuscado);
         return View("Index");
     }
 

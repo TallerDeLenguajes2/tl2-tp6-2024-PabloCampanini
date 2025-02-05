@@ -43,7 +43,20 @@ public class ProductosController : Controller
     public IActionResult ModificarProducto(Productos productoBuscado)
     {
         productosRep.UpdateProducto(productoBuscado.IdProducto, productoBuscado);
-        return View("Index");
+        return RedirectToAction("Index");
+    }
+
+    [HttpGet]
+    public IActionResult EliminarProducto(int idProducto)
+    {
+        return View(productos.FirstOrDefault(prod => prod.IdProducto == idProducto));
+    }
+
+    [HttpPost]
+    public IActionResult EliminarProducto(Productos productoBuscado)
+    {
+        productosRep.DeleteProducto(productoBuscado.IdProducto);
+        return RedirectToAction("Index");
     }
 
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

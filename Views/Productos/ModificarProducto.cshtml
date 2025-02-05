@@ -1,19 +1,22 @@
 @{
-    ViewData["title"] = "Modificar Producto"
+    ViewData["title"] = "Modificar Producto";
 }
 
 @model Productos
 
-<form asp-controller="Producto" asp-action="EditarProducto">
-    <input hidden asp-for="@Model.IdProducto">
-    <section class="form-group">
-        <label asp-for="@Model.Descripcion"></label>
-        <input asp-for="@Model.Descripcion" class="form-control" />
-    </section>
+<section>
+    <form asp-controller="Productos" asp-action="ModificarProducto">
+        <input hidden asp-for="@Model.IdProducto">
 
-    <section class="form-group">
-        <label asp-for="@Model.Precio"></label>
-        <input asp-for="@Model.Precio" class="form-control" />
-    </section>
-    <button type="submit">Enviar</button>
-</form>
+        <section class="form-group">
+            <label asp-for="@Model.Descripcion"></label>
+            <input asp-for="@Model.Descripcion" class="form-control" />
+        </section>
+
+        <section class="form-group">
+            <label asp-for="@Model.Precio"></label>
+            <input asp-for="@Model.Precio" class="form-control" />
+        </section>
+        <button type="submit" class="btn btn-primary my-3">Enviar</button>
+    </form>
+</section>

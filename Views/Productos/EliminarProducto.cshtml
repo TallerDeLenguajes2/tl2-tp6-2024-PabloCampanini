@@ -1,0 +1,25 @@
+@{
+    ViewData["title"] = "Elminar Producto";
+}
+
+@model Productos
+
+<section>
+    <form asp-controller="Productos" asp-action="EliminarProducto">
+        <input hidden asp-for="@Model.IdProducto">
+
+        <section class="alert alert-danger d-flex align-items-center" role="alert">
+            <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Danger:">
+                <use xlink:href="#exclamation-triangle-fill" />
+            </svg>
+            <p>
+                !PELIGRO! - Esta por eliminar eliminar Producto "@Model.Descripcion". ¿Desea continuar?
+            </p>
+        </section>
+
+        <section class="btn-group">
+            <button type="submit" class="btn btn-danger btn-lg my-3 mx-5">Eliminar Producto</button>
+            <a asp-controller="Productos" asp-action="Index" class="btn btn-primary btn-lg my-3 mx-5">Cancelar</a>
+        </section>
+    </form>
+</section>

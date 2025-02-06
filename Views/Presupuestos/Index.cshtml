@@ -1,0 +1,51 @@
+@{
+    ViewData["title"] = "Presupuestos";
+
+}
+
+@model List<Presupuestos>
+
+
+<section>
+    @foreach (var presupuesto in Model)
+    {
+        @if (presupuesto.Detalle.Count != 0)
+        {
+            <table class="table table-hover my-3 caption-top text-center">
+                <caption class="text-center">DETALLES PRESUPUESTO N° @presupuesto.IdPresupuesto</caption>
+                <thead>
+                    <tr>
+                        <th scope="col">Destinatario</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">ID Poducto</th>
+                        <th scope="col">Descripcion</th>
+                        <th scope="col">Precio Unitario</th>
+                        <th scope="col">Cantidad</th>
+                        <th scope="col">Monto</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var presupuestoDetalle in presupuesto.Detalle)
+                    {
+
+                        <tr>
+                            <th scope="row">@presupuesto.NombreDestinatario</th>
+                            <td>@presupuesto.FechaCreacion</td>
+                            <td>@presupuestoDetalle.Producto.IdProducto</td>
+                            <td>@presupuestoDetalle.Producto.Descripcion</td>
+                            <td>@presupuestoDetalle.Producto.Precio</td>
+                            <td>@presupuestoDetalle.Cantidad</td>
+                            <td>$ @(presupuestoDetalle.Cantidad * presupuestoDetalle.Producto.Precio)</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="6">Total presupuesto con IVA</td>
+                        <td>$ @presupuesto.MontoPresupuestoConIva()</td>
+                    </tr>
+                </tfoot>
+            </table>
+        }
+    }
+</section>

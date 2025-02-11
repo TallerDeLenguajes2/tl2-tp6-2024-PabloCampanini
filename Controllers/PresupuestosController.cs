@@ -85,4 +85,27 @@ public class PresupuestosController : Controller
         }
         return RedirectToAction("ModificarPresupuesto");
     }
+
+    [HttpGet]
+    public IActionResult EliminarPresupuesto()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult EliminarPresupuesto(int idPresupuesto)
+    {
+        if (presupuestosRep.GetAllPresupuestos().Exists(presupuesto => presupuesto.IdPresupuesto == idPresupuesto))
+        {
+            presupuestosRep.DeletePresupuesto(idPresupuesto);
+            return RedirectToAction("Index");
+        }
+        return RedirectToAction("ModificarPresupuesto");
+    }
+
+    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
+    public IActionResult Error()
+    {
+        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+    }
 }

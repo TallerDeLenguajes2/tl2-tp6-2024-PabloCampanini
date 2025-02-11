@@ -13,7 +13,7 @@
 
         <section class="form-group">
             <label asp-for="@Model.FechaCreacion">Fecha: </label>
-            <input asp-for="@Model.FechaCreacion" class="form-control">
+            <input asp-for="@Model.FechaCreacion" class="form-control" value="@DateTime.Now">
         </section>
 
         <button type="submit" class="btn btn-primary my-3">Siguiente</button>

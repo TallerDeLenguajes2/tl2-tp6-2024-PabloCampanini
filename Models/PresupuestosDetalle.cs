@@ -6,7 +6,7 @@ public class PresupuestosDetalle
     {
     }
 
-    public Productos Producto { get => producto; }
+    public Productos Producto { get => producto; set => producto = value; }
     public int Cantidad { get => cantidad; set => cantidad = value; }
 
     public void CargarProducto(int cantidad, Productos productoNuevo)

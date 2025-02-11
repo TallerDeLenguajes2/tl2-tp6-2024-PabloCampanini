@@ -4,11 +4,13 @@ using tl2_tp6_2024_PabloCampanini.Models;
 
 public class PresupuestosController : Controller
 {
+    private ProductosRepository productosRep;
     private PresupuestosRepository presupuestosRep;
     private List<Presupuestos> presupuestos = new List<Presupuestos>();
 
     public PresupuestosController()
     {
+        productosRep = new ProductosRepository();
         presupuestosRep = new PresupuestosRepository();
         presupuestos = presupuestosRep.GetAllPresupuestos();
     }
@@ -29,16 +31,42 @@ public class PresupuestosController : Controller
     }
 
     [HttpPost]
-    public IActionResult CargarPresupuestos(Presupuestos nuevoPresupuesto)
+    public IActionResult CargarPresupuesto(Presupuestos nuevoPresupuesto)
     {
         presupuestosRep.CreatePresupuesto(nuevoPresupuesto);
         int idLast = presupuestosRep.GetAllPresupuestos().Last().IdPresupuesto;
-        return RedirectToAction("CargarDetalle", new {idPresupuesto = idLast});
+        return RedirectToAction("CargarDetalle", new { idPresupuesto = idLast });
     }
 
     [HttpGet]
-    public IActionResult CargarDetalle()
+    public IActionResult CargarDetalle(int idPresupuesto)
     {
+        ViewBag.IdPresupuesto = idPresupuesto;
+        ViewBag.Productos = productosRep.GetAllProductos();
+        return View(new PresupuestosDetalle());
+    }
+
+    [HttpPost]
+    public IActionResult CargarDetalle(PresupuestosDetalle nuevoDetalle, int idPresupuesto)
+    {
+        presupuestosRep.UpdatePresupuesto(idPresupuesto, nuevoDetalle.Producto.IdProducto, nuevoDetalle.Cantidad);
+        return RedirectToAction("CargarOtroDetalle", new { idPresupuesto = idPresupuesto });
+    }
+
+    [HttpGet]
+    public IActionResult CargarOtroDetalle(int idPresupuesto)
+    {
+        ViewBag.IdPresupuesto = idPresupuesto;
         return View();
+    }
+
+    [HttpPost]
+    public IActionResult CargarOtroDetalle(string respuesta, int idPresupuesto)
+    {
+        if (respuesta == "Si")
+        {
+            return RedirectToAction("CargarDetalle", new { idPresupuesto = idPresupuesto });
+        }
+        return RedirectToAction("Index");
     }
 }

@@ -1,0 +1,30 @@
+@{
+    ViewData["title"] = "Nuevo Presupuesto";
+    var ListaProductos = ViewBag.Productos as List<Productos>;
+}
+
+@model PresupuestosDetalle
+
+<section>
+    <form asp-controller="Presupuestos" asp-action="CargarDetalle" method="post">
+        <input type="hidden" name="idPresupuesto" value="@ViewBag.IdPresupuesto">
+
+        <section class="form-group">
+            <label asp-for="@Model.Producto.IdProducto">Seleccione un producto</label>
+            <select asp-for="@Model.Producto.IdProducto" class="form-control">
+                <option value="">-- Seleccione --</option>
+                @foreach (var producto in ListaProductos)
+                {
+                    <option value="@producto.IdProducto">@producto.Descripcion - $@producto.Precio</option>
+                }
+            </select>
+        </section>
+
+        <section class="form-group">
+            <label asp-for="@Model.Cantidad">Cantidad comprado</label>
+            <input asp-for="@Model.Cantidad" class="form-control" min="1" value="1">
+        </section>
+
+        <button type="submit" class="btn btn-primary my-3">Cargar</button>
+    </form>
+</section>

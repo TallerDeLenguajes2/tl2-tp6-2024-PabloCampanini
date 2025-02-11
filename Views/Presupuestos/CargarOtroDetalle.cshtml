@@ -1,0 +1,12 @@
+@{
+    ViewData["Title"] = "Agregar otro producto";
+}
+
+<h2>¿Desea agregar otro producto al presupuesto?</h2>
+
+<form asp-controller="Presupuestos" asp-action="CargarOtroDetalle" method="post">
+    <input type="hidden" name="idPresupuesto" value="@ViewBag.IdPresupuesto">
+
+    <button type="submit" name="respuesta" value="Si" class="btn btn-primary">Sí</button>
+    <button type="submit" name="respuesta" value="No" class="btn btn-secondary">No</button>
+</form>

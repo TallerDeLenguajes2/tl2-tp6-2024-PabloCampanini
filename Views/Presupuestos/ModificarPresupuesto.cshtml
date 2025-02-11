@@ -1,0 +1,16 @@
+@{
+    ViewData["title"] = "Modificar Presupuesto";
+}
+
+<h2 class="text-center">Seleccione un numero de presupuesto valido</h2>
+
+<section>
+    <form asp-controller="Presupuestos" asp-action="ModificarPresupuesto" method="post">
+        <section class="form-group">
+            <label for="id">Seleccione un presupuesto</label>
+            <input type="number" name="idPresupuesto" id="id" min="1" value="1" class="form-control">
+        </section>
+
+        <button type="submit" class="btn btn-primary my-3">Siguiente</button>
+    </form>
+</section>

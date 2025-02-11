@@ -69,4 +69,20 @@ public class PresupuestosController : Controller
         }
         return RedirectToAction("Index");
     }
+
+    [HttpGet]
+    public IActionResult ModificarPresupuesto()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult ModificarPresupuesto(int idPresupuesto)
+    {
+        if (presupuestosRep.GetAllPresupuestos().Exists(presupuesto => presupuesto.IdPresupuesto == idPresupuesto))
+        {
+            return RedirectToAction("CargarDetalle", new {idPresupuesto = idPresupuesto});
+        }
+        return RedirectToAction("ModificarPresupuesto");
+    }
 }

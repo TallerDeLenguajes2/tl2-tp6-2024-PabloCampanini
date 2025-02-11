@@ -21,4 +21,24 @@ public class PresupuestosController : Controller
         }
         return View(presupuestos);
     }
+
+    [HttpGet]
+    public IActionResult CargarPresupuesto()
+    {
+        return View(new Presupuestos());
+    }
+
+    [HttpPost]
+    public IActionResult CargarPresupuestos(Presupuestos nuevoPresupuesto)
+    {
+        presupuestosRep.CreatePresupuesto(nuevoPresupuesto);
+        int idLast = presupuestosRep.GetAllPresupuestos().Last().IdPresupuesto;
+        return RedirectToAction("CargarDetalle", new {idPresupuesto = idLast});
+    }
+
+    [HttpGet]
+    public IActionResult CargarDetalle()
+    {
+        return View();
+    }
 }

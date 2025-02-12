@@ -12,6 +12,6 @@ public class PresupuestosDetalle
     public void CargarProducto(int cantidad, Productos productoNuevo)
     {
         Cantidad = cantidad;
-        producto = productoNuevo;
+        Producto = productoNuevo;
     }
 }

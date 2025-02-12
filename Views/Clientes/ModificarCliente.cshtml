@@ -1,0 +1,25 @@
+@{
+    ViewData["title"] = "Modificar Cliente";
+}
+
+@model Clientes
+
+<section>
+    <h2 class="text-center">Modificar datos de @Model.Nombre - cliente numero @Model.ClienteId</h2>
+
+    <form asp-controller="Clientes" asp-action="ModificarCliente" method="post">
+        <input hidden asp-for="@Model.ClienteId">
+        
+        <section class="form-group">
+            <label asp-for="@Model.Email">Email</label>
+            <input type="email" asp-for="@Model.Email" class="form-control" value="@Model.Email">
+        </section>
+
+        <section class="form-group">
+            <label asp-for="@Model.Telefono">Telefono</label>
+            <input type="tel" asp-for="@Model.Telefono" class="form-control" pattern="[0-9]{9}" value="@Model.Telefono">
+        </section>
+
+        <button type="submit" class="btn btn-primary my-3">Modificar</button>
+    </form>
+</section>

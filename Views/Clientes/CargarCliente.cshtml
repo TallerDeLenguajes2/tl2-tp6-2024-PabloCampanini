@@ -1,0 +1,26 @@
+@{
+    ViewData["title"] = "Nuevo Cliente";
+}
+
+@model Clientes
+
+<section>
+    <form asp-controller="Clientes" asp-action="CargarCliente" method="post">
+        <section class="form-group">
+            <label asp-for="@Model.Nombre">Nombre cliente</label>
+            <input asp-for="@Model.Nombre" class="form-control">
+        </section>
+
+        <section class="form-group">
+            <label asp-for="@Model.Email">Email</label>
+            <input type="email" asp-for="@Model.Email" class="form-control" placeholder="algo@gmail.com">
+        </section>
+
+        <section class="form-group">
+            <label asp-for="@Model.Telefono">Telefono</label>
+            <input type="tel" asp-for="@Model.Telefono" class="form-control" pattern="[0-9]{9}">
+        </section>
+
+        <button type="submit" class="btn btn-primary my-3">Cargar</button>
+    </form>
+</section>

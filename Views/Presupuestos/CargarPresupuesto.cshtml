@@ -7,13 +7,13 @@
 <section>
     <form asp-controller="Presupuestos" asp-action="CargarPresupuesto" method="post">
         <section class="form-group">
-            <label asp-for="@Model.NombreDestinatario">Nombre: </label>
-            <input asp-for="@Model.NombreDestinatario" class="form-control">
+            <label asp-for="@Model.Cliente.Nombre">Nombre: </label>
+            <input asp-for="@Model.Cliente.Nombre" class="form-control">
         </section>
 
         <section class="form-group">
             <label asp-for="@Model.FechaCreacion">Fecha: </label>
-            <input asp-for="@Model.FechaCreacion" class="form-control" value="@DateTime.Now">
+            <input type="date" asp-for="@Model.FechaCreacion" class="form-control" value="@DateTime.Now">
         </section>
 
         <button type="submit" class="btn btn-primary my-3">Siguiente</button>

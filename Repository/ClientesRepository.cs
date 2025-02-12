@@ -83,17 +83,38 @@ public class ClientesRepository
 
     public void DeleteCliente(int idBuscado)
     {
-        string queryString = @"DELETE FROM Clientes WHERE ClienteId = @idBuscado";
+        string queryStringDetalle = @"DELETE FROM PresupuestosDetalles 
+                                    WHERE idPresupuesto IN 
+                                                        (SELECT idPresupuesto FROM Presupuestos 
+                                                        WHERE ClienteId = @idBuscado);";
+
+        string queryStringPresupuesto = @"DELETE FROM Presupuestos WHERE ClienteId = @idBuscado";
+
+        string queryStringCliente = @"DELETE FROM Clientes WHERE ClienteId = @idBuscado";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            SqliteCommand commandDetalle = new SqliteCommand(queryStringDetalle, connection);
 
             connection.Open();
 
-            command.Parameters.Add(new SqliteParameter("idBuscado", idBuscado));
+            commandDetalle.Parameters.Add(new SqliteParameter("idBuscado", idBuscado));
 
-            command.ExecuteNonQuery();
+            commandDetalle.ExecuteNonQuery();
+            
+
+            SqliteCommand commandPresupuesto = new SqliteCommand(queryStringPresupuesto, connection);
+
+            commandPresupuesto.Parameters.Add(new SqliteParameter("idBuscado", idBuscado));
+
+            commandPresupuesto.ExecuteNonQuery();
+
+
+            SqliteCommand commandCliente = new SqliteCommand(queryStringCliente, connection);
+
+            commandCliente.Parameters.Add(new SqliteParameter("idBuscado", idBuscado));
+
+            commandCliente.ExecuteNonQuery();
 
             connection.Close();
         }

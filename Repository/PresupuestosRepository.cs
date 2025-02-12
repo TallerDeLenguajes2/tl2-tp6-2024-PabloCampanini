@@ -6,8 +6,8 @@ public class PresupuestosRepository
 
     public void CreatePresupuesto(Presupuestos presupuestoNuevo)
     {
-        string queryString = "INSERT INTO Presupuestos (NombreDestinatario, FechaCreacion) " +
-                             "VALUES (@NombreDestinatario, @FechaCreacion);";
+        string queryString = "INSERT INTO Presupuestos (ClienteId, FechaCreacion) " +
+                             "VALUES (@ClienteId, @FechaCreacion);";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
         {
@@ -15,7 +15,7 @@ public class PresupuestosRepository
 
             connection.Open();
 
-            command.Parameters.Add(new SqliteParameter("@NombreDestinatario", presupuestoNuevo.NombreDestinatario));
+            command.Parameters.Add(new SqliteParameter("@ClienteId", presupuestoNuevo.Cliente.ClienteId));
             command.Parameters.Add(new SqliteParameter("@FechaCreacion", presupuestoNuevo.FechaCreacion));
 
             command.ExecuteNonQuery();
@@ -26,7 +26,14 @@ public class PresupuestosRepository
 
     public List<Presupuestos> GetAllPresupuestos()
     {
-        string queryString = "SELECT * FROM Presupuestos;";
+        string queryString = "SELECT  p.idPresupuesto AS idPresupuesto, " +
+                                    "c.ClienteId AS ClienteId, " +
+                                    "c.Nombre AS Nombre, " +
+                                    "c.Email AS Email, " +
+                                    "c.Telefono AS Telefono, " +
+                                    "p.FechaCreacion AS FechaCreacion " +
+                            "FROM Presupuestos AS p " +
+                            "INNER JOIN Clientes AS c ON p.ClienteId = c.ClienteId;";
 
         List<Presupuestos> ListaPresupuestos = new List<Presupuestos>();
 
@@ -43,7 +50,10 @@ public class PresupuestosRepository
                     Presupuestos pres = new Presupuestos();
 
                     pres.IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]);
-                    pres.NombreDestinatario = Convert.ToString(reader["NombreDestinatario"]);
+                    pres.Cliente.ClienteId = Convert.ToInt32(reader["ClienteId"]);
+                    pres.Cliente.Nombre = Convert.ToString(reader["Nombre"]);
+                    pres.Cliente.Email = Convert.ToString(reader["Email"]);
+                    pres.Cliente.Telefono = Convert.ToString(reader["Telefono"]);
                     pres.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);
 
                     ListaPresupuestos.Add(pres);
@@ -58,7 +68,18 @@ public class PresupuestosRepository
 
     public Presupuestos GetDetalleDePresupuesto(int idBuscado)
     {
-        string queryString = @"SELECT  p.idPresupuesto as idPresupuesto, p.NombreDestinatario,p.FechaCreacion,pre.idProducto as idProducto, pre.Cantidad,pro.Descripcion, pro.Precio FROM Presupuestos AS p 
+        string queryString = @"SELECT p.idPresupuesto AS idPresupuesto, 
+                                    c.ClienteId AS ClienteId,
+                                    c.Nombre AS Nombre,
+                                    c.Email AS Email,
+                                    c.Telefono AS Telefono,
+                                    p.FechaCreacion AS FechaCreacion,
+                                    pro.idProducto AS idProducto,
+                                    pre.Cantidad AS Cantidad,
+                                    pro.Descripcion AS Descripcion, 
+                                    pro.Precio AS Precio 
+                            FROM Presupuestos AS p 
+                            INNER JOIN Clientes AS c ON p.ClienteId = c.ClienteId
                             INNER JOIN PresupuestosDetalle AS pre ON p.idPresupuesto = pre.idPresupuesto 
                             INNER JOIN Productos AS pro ON pre.idProducto = pro.idProducto 
                             WHERE p.idPresupuesto = @idBuscado;";
@@ -90,7 +111,10 @@ public class PresupuestosRepository
 
 
                     pres.IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]);
-                    pres.NombreDestinatario = Convert.ToString(reader["NombreDestinatario"]);
+                    pres.Cliente.ClienteId = Convert.ToInt32(reader["ClienteId"]);
+                    pres.Cliente.Nombre = Convert.ToString(reader["Nombre"]);
+                    pres.Cliente.Email = Convert.ToString(reader["Email"]);
+                    pres.Cliente.Telefono = Convert.ToString(reader["Telefono"]);
                     pres.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);
                     pres.AgregarDetalle(prodDet);
                 }

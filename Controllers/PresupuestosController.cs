@@ -4,12 +4,14 @@ using tl2_tp6_2024_PabloCampanini.Models;
 
 public class PresupuestosController : Controller
 {
+    private ClientesRepository clientesRep;
     private ProductosRepository productosRep;
     private PresupuestosRepository presupuestosRep;
     private List<Presupuestos> presupuestos = new List<Presupuestos>();
 
     public PresupuestosController()
     {
+        clientesRep = new ClientesRepository();
         productosRep = new ProductosRepository();
         presupuestosRep = new PresupuestosRepository();
         presupuestos = presupuestosRep.GetAllPresupuestos();
@@ -27,6 +29,7 @@ public class PresupuestosController : Controller
     [HttpGet]
     public IActionResult CargarPresupuesto()
     {
+        ViewBag.Clientes = clientesRep.GetAllClientes();
         return View(new Presupuestos());
     }
 

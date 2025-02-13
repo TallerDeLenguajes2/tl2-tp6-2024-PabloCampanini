@@ -83,7 +83,7 @@ public class ClientesRepository
 
     public void DeleteCliente(int idBuscado)
     {
-        string queryStringDetalle = @"DELETE FROM PresupuestosDetalles 
+        string queryStringDetalle = @"DELETE FROM PresupuestosDetalle
                                     WHERE idPresupuesto IN 
                                                         (SELECT idPresupuesto FROM Presupuestos 
                                                         WHERE ClienteId = @idBuscado);";

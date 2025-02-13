@@ -30,7 +30,7 @@
 
                         <tr>
                             <th scope="row">@presupuesto.Cliente.Nombre</th>
-                            <td>@presupuesto.FechaCreacion</td>
+                            <td>@presupuesto.FechaCreacion.ToShortDateString()</td>
                             <td>@presupuestoDetalle.Producto.IdProducto</td>
                             <td>@presupuestoDetalle.Producto.Descripcion</td>
                             <td>@presupuestoDetalle.Producto.Precio</td>

@@ -116,7 +116,7 @@ public class ProductosRepository
 
     public void DeleteProducto(int idBuscado)
     {
-        string queryStringDetalle = "DELETE FROM PrsupuestosDetalles WHERE idProducto = @idBuscado";
+        string queryStringDetalle = "DELETE FROM PresupuestosDetalle WHERE idProducto = @idBuscado";
 
         string queryStringProducto = "DELETE FROM Productos WHERE idProducto = @idBuscado";
 

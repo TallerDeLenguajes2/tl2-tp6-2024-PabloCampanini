@@ -7,6 +7,7 @@ public class Presupuestos
     public Presupuestos()
     {
         detalle = new List<PresupuestosDetalle>();
+        cliente = new Clientes();
     }
 
     public int IdPresupuesto { get => idPresupuesto; set => idPresupuesto = value; }

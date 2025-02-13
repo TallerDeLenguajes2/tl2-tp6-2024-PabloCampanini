@@ -10,6 +10,8 @@
     <form asp-controller="Clientes" asp-action="ModificarCliente">
         <input hidden asp-for="@Model.ClienteId">
 
+        <input hidden asp-for="@Model.Nombre">
+
         <section class="form-group">
             <label asp-for="@Model.Email">Email</label>
             <input type="email" asp-for="@Model.Email" class="form-control" value="@Model.Email">

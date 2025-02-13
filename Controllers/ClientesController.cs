@@ -29,8 +29,9 @@ public class ClientesController : Controller
 
     [HttpGet]
     public IActionResult ModificarCliente(int ClienteId)
-    {
-        return View(clientesRep.GetAllClientes().FirstOrDefault(cliente => cliente.ClienteId == ClienteId));
+    {var cliente = clientesRep.GetAllClientes().FirstOrDefault(cliente => cliente.ClienteId == ClienteId);
+
+        return View(cliente);
     }
 
     [HttpPost]

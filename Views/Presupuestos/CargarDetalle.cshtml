@@ -1,19 +1,18 @@
 @{
     ViewData["title"] = "Nuevo Presupuesto";
-    var ListaProductos = ViewBag.Productos as List<Productos>;
 }
 
-@model PresupuestosDetalle
+@model ProductoPresupuestosViewModel
 
 <section>
     <form asp-controller="Presupuestos" asp-action="CargarDetalle" method="post">
-        <input type="hidden" name="idPresupuesto" value="@ViewBag.IdPresupuesto">
+        <input hidden asp-for="@Model.idPresupuesto">
 
         <section class="form-group">
-            <label asp-for="@Model.Producto.IdProducto">Seleccione un producto</label>
-            <select asp-for="@Model.Producto.IdProducto" class="form-control">
+            <label asp-for="@Model.NuevoDetalle.Producto.IdProducto">Seleccione un producto</label>
+            <select asp-for="@Model.NuevoDetalle.Producto.IdProducto" class="form-control">
                 <option value="">-- Seleccione --</option>
-                @foreach (var producto in ListaProductos)
+                @foreach (var producto in Model.ListaProductos)
                 {
                     <option value="@producto.IdProducto">@producto.Descripcion - $@producto.Precio</option>
                 }
@@ -21,8 +20,8 @@
         </section>
 
         <section class="form-group">
-            <label asp-for="@Model.Cantidad">Cantidad comprado</label>
-            <input asp-for="@Model.Cantidad" class="form-control" min="1" value="1">
+            <label asp-for="@Model.NuevoDetalle.Cantidad">Cantidad comprado</label>
+            <input asp-for="@Model.NuevoDetalle.Cantidad" class="form-control" min="1" value="1">
         </section>
 
         <button type="submit" class="btn btn-primary my-3">Cargar</button>

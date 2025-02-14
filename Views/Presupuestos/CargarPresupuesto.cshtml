@@ -2,7 +2,7 @@
     ViewData["title"] = "Nuevo Presupuesto";
 }
 
-@model PresupuestosViewModel
+@model ClientePresupuestosViewModel
 
 <section>
     <form asp-controller="Presupuestos" asp-action="CargarPresupuesto" method="post">
@@ -10,7 +10,7 @@
             <label asp-for="@Model.NuevoPresupuesto.Cliente.ClienteId">Seleccione un cliente: </label>
             <select asp-for="@Model.NuevoPresupuesto.Cliente.ClienteId" class="form-control">
                 <option value="">-- Seleccione --</option>
-                @foreach (var cliente in @Model.ListaClientes)
+                @foreach (var cliente in Model.ListaClientes)
                 {
                     <option value="@cliente.ClienteId">@cliente.Nombre</option>
                 }

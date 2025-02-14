@@ -29,18 +29,19 @@ public class PresupuestosController : Controller
     [HttpGet]
     public IActionResult CargarPresupuesto()
     {
-        PresupuestosViewModel modelPresupuesto = new PresupuestosViewModel()
+        ClientePresupuestosViewModel modelClientePresupuesto = new ClientePresupuestosViewModel()
         {
             ListaClientes = clientesRep.GetAllClientes(),
             NuevoPresupuesto = new Presupuestos()
         };
-        return View(modelPresupuesto);
+
+        return View(modelClientePresupuesto);
     }
 
     [HttpPost]
-    public IActionResult CargarPresupuesto(PresupuestosViewModel modelPresupuesto)
+    public IActionResult CargarPresupuesto(ClientePresupuestosViewModel modelClientePresupuesto)
     {
-        presupuestosRep.CreatePresupuesto(modelPresupuesto.NuevoPresupuesto);
+        presupuestosRep.CreatePresupuesto(modelClientePresupuesto.NuevoPresupuesto);
         int idLast = presupuestosRep.GetAllPresupuestos().Last().IdPresupuesto;
         return RedirectToAction("CargarDetalle", new { idPresupuesto = idLast });
     }
@@ -48,16 +49,24 @@ public class PresupuestosController : Controller
     [HttpGet]
     public IActionResult CargarDetalle(int idPresupuesto)
     {
-        ViewBag.IdPresupuesto = idPresupuesto;
-        ViewBag.Productos = productosRep.GetAllProductos();
-        return View(new PresupuestosDetalle());
+        ProductoPresupuestosViewModel modelProductoPresupuesto = new ProductoPresupuestosViewModel()
+        {
+            idPresupuesto = idPresupuesto,
+            ListaProductos = productosRep.GetAllProductos(),
+            NuevoDetalle = new PresupuestosDetalle()
+        };
+
+        return View(modelProductoPresupuesto);
     }
 
     [HttpPost]
-    public IActionResult CargarDetalle(PresupuestosDetalle nuevoDetalle, int idPresupuesto)
+    public IActionResult CargarDetalle(ProductoPresupuestosViewModel modelProductoPresupuesto)
     {
-        presupuestosRep.UpdatePresupuesto(idPresupuesto, nuevoDetalle.Producto.IdProducto, nuevoDetalle.Cantidad);
-        return RedirectToAction("CargarOtroDetalle", new { idPresupuesto = idPresupuesto });
+        presupuestosRep.UpdatePresupuesto(modelProductoPresupuesto.idPresupuesto, 
+                                        modelProductoPresupuesto.NuevoDetalle.Producto.IdProducto,
+                                        modelProductoPresupuesto.NuevoDetalle.Cantidad);
+
+        return RedirectToAction("CargarOtroDetalle", new { idPresupuesto = modelProductoPresupuesto.idPresupuesto });
     }
 
     [HttpGet]

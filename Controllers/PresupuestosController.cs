@@ -29,14 +29,18 @@ public class PresupuestosController : Controller
     [HttpGet]
     public IActionResult CargarPresupuesto()
     {
-        ViewBag.Clientes = clientesRep.GetAllClientes();
-        return View(new Presupuestos());
+        PresupuestosViewModel modelPresupuesto = new PresupuestosViewModel()
+        {
+            ListaClientes = clientesRep.GetAllClientes(),
+            NuevoPresupuesto = new Presupuestos()
+        };
+        return View(modelPresupuesto);
     }
 
     [HttpPost]
-    public IActionResult CargarPresupuesto(Presupuestos nuevoPresupuesto)
+    public IActionResult CargarPresupuesto(PresupuestosViewModel modelPresupuesto)
     {
-        presupuestosRep.CreatePresupuesto(nuevoPresupuesto);
+        presupuestosRep.CreatePresupuesto(modelPresupuesto.NuevoPresupuesto);
         int idLast = presupuestosRep.GetAllPresupuestos().Last().IdPresupuesto;
         return RedirectToAction("CargarDetalle", new { idPresupuesto = idLast });
     }
@@ -84,7 +88,7 @@ public class PresupuestosController : Controller
     {
         if (presupuestosRep.GetAllPresupuestos().Exists(presupuesto => presupuesto.IdPresupuesto == idPresupuesto))
         {
-            return RedirectToAction("CargarDetalle", new {idPresupuesto = idPresupuesto});
+            return RedirectToAction("CargarDetalle", new { idPresupuesto = idPresupuesto });
         }
         return RedirectToAction("ModificarPresupuesto");
     }

@@ -1,17 +1,16 @@
 @{
     ViewData["title"] = "Nuevo Presupuesto";
-    var ListaClientes = ViewBag.Clientes as List<Clientes>;
 }
 
-@model Presupuestos
+@model PresupuestosViewModel
 
 <section>
     <form asp-controller="Presupuestos" asp-action="CargarPresupuesto" method="post">
         <section class="form-group">
-            <label asp-for="@Model.Cliente.ClienteId">Seleccione un cliente: </label>
-            <select asp-for="@Model.Cliente.ClienteId" class="form-control">
+            <label asp-for="@Model.NuevoPresupuesto.Cliente.ClienteId">Seleccione un cliente: </label>
+            <select asp-for="@Model.NuevoPresupuesto.Cliente.ClienteId" class="form-control">
                 <option value="">-- Seleccione --</option>
-                @foreach (var cliente in ListaClientes)
+                @foreach (var cliente in @Model.ListaClientes)
                 {
                     <option value="@cliente.ClienteId">@cliente.Nombre</option>
                 }
@@ -19,8 +18,8 @@
         </section>
 
         <section class="form-group">
-            <label asp-for="@Model.FechaCreacion">Fecha: </label>
-            <input type="date" asp-for="@Model.FechaCreacion" class="form-control" value="@DateTime.Now">
+            <label asp-for="@Model.NuevoPresupuesto.FechaCreacion">Fecha: </label>
+            <input type="date" asp-for="@Model.NuevoPresupuesto.FechaCreacion" class="form-control" value="@DateTime.Now">
         </section>
 
         <button type="submit" class="btn btn-primary my-3">Siguiente</button>

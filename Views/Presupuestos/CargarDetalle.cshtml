@@ -4,6 +4,8 @@
 
 @model ProductoPresupuestosViewModel
 
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}
+
 <section>
     <form asp-controller="Presupuestos" asp-action="CargarDetalle" method="post">
         <input hidden asp-for="@Model.idPresupuesto">

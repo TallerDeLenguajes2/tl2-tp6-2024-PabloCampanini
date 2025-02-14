@@ -4,6 +4,8 @@
 
 @model Productos
 
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}
+
 <section>
     <form asp-controller="Productos" asp-action="CrearProducto" method="post">
         <section class="form-group">

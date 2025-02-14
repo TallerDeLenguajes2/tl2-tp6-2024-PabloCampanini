@@ -23,6 +23,11 @@ public class ClientesController : Controller
     [HttpPost]
     public IActionResult CargarCliente(Clientes clienteNuevo)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(clienteNuevo);
+        }
+
         clientesRep.CreateCliente(clienteNuevo);
         return RedirectToAction("Index");
     }
@@ -37,6 +42,11 @@ public class ClientesController : Controller
     [HttpPost]
     public IActionResult ModificarCliente(Clientes clienteModificar)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(clienteModificar);
+        }
+
         clientesRep.UpdateCliente(clienteModificar.ClienteId, clienteModificar);
         return RedirectToAction("Index");
     }

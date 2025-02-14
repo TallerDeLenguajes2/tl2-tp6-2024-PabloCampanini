@@ -41,6 +41,11 @@ public class PresupuestosController : Controller
     [HttpPost]
     public IActionResult CargarPresupuesto(ClientePresupuestosViewModel modelClientePresupuesto)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(modelClientePresupuesto);
+        }
+
         presupuestosRep.CreatePresupuesto(modelClientePresupuesto.NuevoPresupuesto);
         int idLast = presupuestosRep.GetAllPresupuestos().Last().IdPresupuesto;
         return RedirectToAction("CargarDetalle", new { idPresupuesto = idLast });
@@ -62,6 +67,11 @@ public class PresupuestosController : Controller
     [HttpPost]
     public IActionResult CargarDetalle(ProductoPresupuestosViewModel modelProductoPresupuesto)
     {
+        if (!ModelState.IsValid)
+        {
+            return View(modelProductoPresupuesto);
+        }
+
         presupuestosRep.UpdatePresupuesto(modelProductoPresupuesto.idPresupuesto, 
                                         modelProductoPresupuesto.NuevoDetalle.Producto.IdProducto,
                                         modelProductoPresupuesto.NuevoDetalle.Cantidad);

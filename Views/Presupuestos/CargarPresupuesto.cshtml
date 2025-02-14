@@ -4,6 +4,8 @@
 
 @model ClientePresupuestosViewModel
 
+@section Scripts{<partial name="_ValidationScriptsPartial"/>}
+
 <section>
     <form asp-controller="Presupuestos" asp-action="CargarPresupuesto" method="post">
         <section class="form-group">

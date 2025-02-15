@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 
-public class ProductosRepository
+public class ProductosRepository : IProductosRepository
 {
     //Direccion de la db
     private const string connectionString = @"Data Source=db\Tienda.db;Cache=Shared";

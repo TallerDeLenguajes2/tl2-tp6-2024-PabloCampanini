@@ -6,18 +6,16 @@ using tl2_tp6_2024_PabloCampanini.Models;
 
 public class ProductosController : Controller
 {
-    private ProductosRepository productosRep;
-    private List<Productos> productos = new List<Productos>();
+    private readonly IProductosRepository productosRep;
 
-    public ProductosController()
+    public ProductosController(IProductosRepository productosRepository)
     {
-        productosRep = new ProductosRepository();
-        productos = productosRep.GetAllProductos();
+        productosRep = productosRepository;
     }
 
     public IActionResult Index()
     {
-        return View(productos);
+        return View(productosRep.GetAllProductos());
     }
 
     [HttpGet]
@@ -36,7 +34,7 @@ public class ProductosController : Controller
     [HttpGet]
     public IActionResult ModificarProducto(int idBuscado)
     {
-        return View(productos.FirstOrDefault(prod => prod.IdProducto == idBuscado));
+        return View(productosRep.GetAllProductos().FirstOrDefault(prod => prod.IdProducto == idBuscado));
     }
 
     [HttpPost]
@@ -49,7 +47,7 @@ public class ProductosController : Controller
     [HttpGet]
     public IActionResult EliminarProducto(int idProducto)
     {
-        return View(productos.FirstOrDefault(prod => prod.IdProducto == idProducto));
+        return View(productosRep.GetAllProductos().FirstOrDefault(prod => prod.IdProducto == idProducto));
     }
 
     [HttpPost]

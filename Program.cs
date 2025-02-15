@@ -3,6 +3,11 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
+// Inyeccion de Repositorios - Uso AddScoped para que se cree una instancia por cada solicitud HTTP
+builder.Services.AddScoped<IPresupuestosRepository, PresupuestosRepository>();
+builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

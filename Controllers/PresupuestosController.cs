@@ -4,19 +4,19 @@ using tl2_tp6_2024_PabloCampanini.Models;
 
 public class PresupuestosController : Controller
 {
-    private ProductosRepository productosRep;
-    private PresupuestosRepository presupuestosRep;
-    private List<Presupuestos> presupuestos = new List<Presupuestos>();
+    private readonly IProductosRepository productosRep;
+    private readonly IPresupuestosRepository presupuestosRep;
 
-    public PresupuestosController()
+    public PresupuestosController(IProductosRepository productosRepository, IPresupuestosRepository presupuestosRepository)
     {
-        productosRep = new ProductosRepository();
-        presupuestosRep = new PresupuestosRepository();
-        presupuestos = presupuestosRep.GetAllPresupuestos();
+        productosRep = productosRepository;
+        presupuestosRep = presupuestosRepository;
     }
 
     public IActionResult Index()
     {
+        var presupuestos = presupuestosRep.GetAllPresupuestos();
+
         for (int i = 0; i < presupuestos.Count; i++)
         {
             presupuestos[i] = presupuestosRep.GetDetalleDePresupuesto(presupuestos[i].IdPresupuesto);

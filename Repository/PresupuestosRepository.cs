@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 
-public class PresupuestosRepository
+public class PresupuestosRepository : IPresupuestosRepository
 {
     private const string connectionString = @"Data Source=db\Tienda.db;Cache=Shared";
 

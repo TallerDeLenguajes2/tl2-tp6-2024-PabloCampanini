@@ -1,0 +1,50 @@
+@{
+    ViewData["title"] = "Login";
+}
+
+@model UsuarioViewModel
+
+@* <section>
+    <form asp-controller="DatosUsuario" asp-action="Login" method="post">
+        <section class="form-group">
+            <label asp-for="@Model.Usuario">Usuario:</label>
+            <input asp-for="@Model.Usuario" class="form-control">
+        </section>
+        
+        <section class="form-group">
+            <label asp-for="@Model.Contrasenia">Contraseña:</label>
+            <input type="password" asp-for="@Model.Contrasenia" class="form-control">
+        </section>
+
+        <button type="submit" class="btn btn-primary my-3">Iniciar Sesion</button>
+    </form>
+</section> *@
+
+<main class="d-flex justify-content-center align-items-center vh-100">
+    <section class="card shadow-lg p-4" style="max-width: 400px; width: 100%;">
+        <header class="card-header text-center">
+            <h2 class="mb-0">Iniciar Sesión</h2>
+        </header>
+        <section class="card-body">
+            <form asp-controller="DatosUsuario" asp-action="Login" method="post">
+                <fieldset>
+                    <legend class="visually-hidden">Formulario de inicio de sesión</legend>
+
+                    <section class="mb-3">
+                        <label asp-for="@Model.Usuario" class="form-label">Usuario</label>
+                        <input asp-for="@Model.Usuario" class="form-control" placeholder="Ingrese su usuario" required>
+                    </section>
+
+                    <section class="mb-3">
+                        <label asp-for="@Model.Contrasenia" class="form-label">Contraseña</label>
+                        <input type="password" asp-for="@Model.Contrasenia" class="form-control" placeholder="Ingrese su contraseña" required>
+                    </section>
+
+                    <section>
+                        <button type="submit" class="btn btn-primary w-100">Iniciar Sesión</button>
+                    </section>
+                </fieldset>
+            </form>
+        </section>
+    </section>
+</main>

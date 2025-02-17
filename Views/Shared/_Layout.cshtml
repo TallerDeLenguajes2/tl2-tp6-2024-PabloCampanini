@@ -21,46 +21,61 @@
                 </button>
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="BotonProductos" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Productos
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="BotonProductos">
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Productos"
-                                        asp-action="Index">Listar Productos</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Productos"
-                                        asp-action="CrearProducto">Crear Producto</a>
-                                </li>
-                            </ul>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="BotonPresupuestos" role="button"
-                                data-bs-toggle="dropdown" aria-expanded="false">
-                                Presupuestos
-                            </a>
-                            <ul class="dropdown-menu" aria-labelledby="BotonPresupuestos">
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Presupuestos"
-                                        asp-action="Index">Presupuestos</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Presupuestos"
-                                        asp-action="CargarPresupuesto">Cargar Presupuesto</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Presupuestos"
-                                        asp-action="ModificarPresupuesto">Modificar Presupuesto</a>
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" asp-area="" asp-controller="Presupuestos"
-                                        asp-action="EliminarPresupuesto">Eliminar Presupuesto</a>
-                                </li>
-                            </ul>
-                        </li>
+                        @if (Context.Session.GetInt32("idIngresado") != null)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="BotonProductos" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Productos
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="BotonProductos">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Productos"
+                                            asp-action="Index">Listar Productos</a>
+                                    </li>
+                                    @if (Context.Session.GetString("rol") == "admin")
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Productos"
+                                                asp-action="CrearProducto">Crear Producto</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="BotonPresupuestos" role="button"
+                                    data-bs-toggle="dropdown" aria-expanded="false">
+                                    Presupuestos
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="BotonPresupuestos">
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Presupuestos"
+                                            asp-action="Index">Presupuestos</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Presupuestos"
+                                            asp-action="CargarPresupuesto">Cargar Presupuesto</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Presupuestos"
+                                            asp-action="ModificarPresupuesto">Modificar Presupuesto</a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" asp-area="" asp-controller="Presupuestos"
+                                            asp-action="EliminarPresupuesto">Eliminar Presupuesto</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="DatosUsuario" asp-action="Logout">Cerrar Sesion</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-controller="DatosUsuario" asp-action="Index">Iniciar Sesion</a>
+                            </li>
+                        }
                     </ul>
                 </div>
             </div>

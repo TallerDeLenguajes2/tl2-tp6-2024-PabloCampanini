@@ -1,6 +1,6 @@
 using Microsoft.Data.Sqlite;
 
-public class UsuarioRepository : IUsuarioRepository
+public class DatosUsuarioRepository : IDatosUsuarioRepository
 {
     private const string connectionString = @"Data Source=db\Tienda.db;Cache=Shared";
 
@@ -17,7 +17,7 @@ public class UsuarioRepository : IUsuarioRepository
 
             command.Parameters.Add(new SqliteParameter("@Nombre", usuario.Nombre));
             command.Parameters.Add(new SqliteParameter("@Usuario", usuario.Usuario));
-            command.Parameters.Add(new SqliteParameter("@Contraseña", usuario.Contraseña));
+            command.Parameters.Add(new SqliteParameter("@Contraseña", usuario.Contrasenia));
             command.Parameters.Add(new SqliteParameter("@Rol", usuario.Rol));
 
             command.ExecuteNonQuery();
@@ -26,7 +26,7 @@ public class UsuarioRepository : IUsuarioRepository
         }
     }
 
-    public DatosUsuario ObtenerUsuarioById(int idBuscado)
+    public DatosUsuario GetUsuarioById(int idBuscado)
     {
         DatosUsuario usuario = new DatosUsuario();
 
@@ -45,7 +45,7 @@ public class UsuarioRepository : IUsuarioRepository
                 usuario.IdUsuario = Convert.ToInt32(reader["idUsuario"]);
                 usuario.Nombre = Convert.ToString(reader["Nombre"]);
                 usuario.Usuario = Convert.ToString(reader["Usuario"]);
-                usuario.Contraseña = Convert.ToString(reader["Contraseña"]);
+                usuario.Contrasenia = Convert.ToString(reader["Contraseña"]);
                 usuario.Rol = Convert.ToString(reader["Rol"]);
             }
 
@@ -76,7 +76,7 @@ public class UsuarioRepository : IUsuarioRepository
                     usuario.IdUsuario = Convert.ToInt32(reader["idUsuario"]);
                     usuario.Nombre = Convert.ToString(reader["Nombre"]);
                     usuario.Usuario = Convert.ToString(reader["Usuario"]);
-                    usuario.Contraseña = Convert.ToString(reader["Contraseña"]);
+                    usuario.Contrasenia = Convert.ToString(reader["Contraseña"]);
                     usuario.Rol = Convert.ToString(reader["Rol"]);
 
                     ListaUsuarios.Add(usuario);
@@ -106,7 +106,7 @@ public class UsuarioRepository : IUsuarioRepository
 
             command.Parameters.Add(new SqliteParameter("@Nombre", usuario.Nombre));
             command.Parameters.Add(new SqliteParameter("@Usuario", usuario.Usuario));
-            command.Parameters.Add(new SqliteParameter("@Contraseña", usuario.Contraseña));
+            command.Parameters.Add(new SqliteParameter("@Contraseña", usuario.Contrasenia));
             command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
 
             command.ExecuteNonQuery();

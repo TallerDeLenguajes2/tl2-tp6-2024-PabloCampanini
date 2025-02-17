@@ -8,7 +8,7 @@
         <thead>
             <tr>
                 <th scope="col">ID</th>
-                <th scope="col">Descripcion</th>
+                <th scope="col" colspan="2">Descripcion</th>
                 <th scope="col">Precio</th>
                 <th scope="col"></th>
                 <th scope="col"></th>
@@ -21,14 +21,17 @@
                     <th scope="row">@producto.IdProducto</th>
                     <td colspan="2">@producto.Descripcion</td>
                     <td>$ @producto.Precio</td>
-                    <td>
-                        <a class="btn btn-primary" role="button" asp-area="" asp-controller="Productos"
-                            asp-action="ModificarProducto" asp-route-idBuscado="@producto.IdProducto">Modificar</a>
-                    </td>
-                    <td>
-                        <a class="btn btn-danger" role="button" asp-area="" asp-controller="Productos"
-                            asp-action="EliminarProducto" asp-route-idProducto="@producto.IdProducto">Eliminar</a>
-                    </td>
+                    @if (Context.Session.GetString("rol") == "admin")
+                    {
+                        <td>
+                            <a class="btn btn-primary" role="button" asp-area="" asp-controller="Productos"
+                                asp-action="ModificarProducto" asp-route-idBuscado="@producto.IdProducto">Modificar</a>
+                        </td>
+                        <td>
+                            <a class="btn btn-danger" role="button" asp-area="" asp-controller="Productos"
+                                asp-action="EliminarProducto" asp-route-idProducto="@producto.IdProducto">Eliminar</a>
+                        </td>
+                    }
                 </tr>
             }
         </tbody>

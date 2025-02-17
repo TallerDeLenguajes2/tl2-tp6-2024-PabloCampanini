@@ -1,12 +1,12 @@
 using Microsoft.Data.Sqlite;
 
-public class UsuarioRepository
+public class UsuarioRepository : IUsuarioRepository
 {
     private const string connectionString = @"Data Source=db\Tienda.db;Cache=Shared";
 
     public void CreateUsuario(DatosUsuario usuario)
     {
-        string queryString = @"INSER INTO Usuarios (Nombre, Usuario, Contraseña, Rol)
+        string queryString = @"INSERT INTO Usuarios (Nombre, Usuario, Contraseña, Rol)
                             VALUES (@Nombre, @Usuario, @Contraseña, @Rol)";
 
         using (SqliteConnection connection = new SqliteConnection(connectionString))
@@ -87,5 +87,49 @@ public class UsuarioRepository
         }
 
         return ListaUsuarios;
+    }
+
+    public void UpdateDatosUsuario(int idBuscado, DatosUsuario usuario)
+    {
+        string queryString = @"UPDATE Usuarios
+                             SET Nombre = @Nombre, 
+                                 Usuario = @Usuario,
+                                 Contraseña = @Contraseña,
+                                 Rol = @Rol
+                             WHERE idUsuario = @idBuscado";
+
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        {
+            SqliteCommand command = new SqliteCommand(queryString, connection);
+
+            connection.Open();
+
+            command.Parameters.Add(new SqliteParameter("@Nombre", usuario.Nombre));
+            command.Parameters.Add(new SqliteParameter("@Usuario", usuario.Usuario));
+            command.Parameters.Add(new SqliteParameter("@Contraseña", usuario.Contraseña));
+            command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+
+            command.ExecuteNonQuery();
+
+            connection.Close();
+        }
+    }
+
+    public void DeleteDatosUsuario(int idBuscado)
+    {
+        string queryString = @"DELETE FROM Usuarios WHERE idUsuario = @idBuscado";
+
+        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        {
+            SqliteCommand command = new SqliteCommand(queryString, connection);
+
+            connection.Open();
+
+            command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+
+            command.ExecuteNonQuery();
+
+            connection.Close();
+        }
     }
 }

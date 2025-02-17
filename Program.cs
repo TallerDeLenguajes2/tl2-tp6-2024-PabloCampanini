@@ -6,6 +6,7 @@ builder.Services.AddControllersWithViews();
 // Inyeccion de Repositorios - Uso AddScoped para que se cree una instancia por cada solicitud HTTP
 builder.Services.AddScoped<IPresupuestosRepository, PresupuestosRepository>();
 builder.Services.AddScoped<IProductosRepository, ProductosRepository>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 
 var app = builder.Build();

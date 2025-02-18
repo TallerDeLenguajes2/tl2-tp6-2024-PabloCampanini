@@ -23,7 +23,7 @@ public class ProductosController : Controller
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al obtener la lista de productos.");
             return BadRequest();
         }
     }
@@ -41,7 +41,7 @@ public class ProductosController : Controller
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al cargar la vista de creación de productos.");
             return BadRequest();
         }
     }
@@ -60,7 +60,7 @@ public class ProductosController : Controller
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al crear un producto.");
             return BadRequest();
         }
     }
@@ -78,7 +78,7 @@ public class ProductosController : Controller
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al cargar la vista de modificación de productos para el ID {IdBuscado}.", idBuscado);
             return BadRequest();
         }
     }
@@ -97,7 +97,7 @@ public class ProductosController : Controller
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al modificar el producto con ID {IdProducto}.", productoBuscado.IdProducto);
             return BadRequest();
         }
     }
@@ -115,7 +115,7 @@ public class ProductosController : Controller
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al cargar la vista de eliminación de productos para el ID {IdProducto}.", idProducto);
             return BadRequest();
         }
     }
@@ -134,7 +134,7 @@ public class ProductosController : Controller
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al eliminar el producto con ID {IdProducto}.", productoBuscado.IdProducto);
             return BadRequest();
         }
     }

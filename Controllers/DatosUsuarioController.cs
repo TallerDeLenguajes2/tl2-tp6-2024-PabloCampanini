@@ -19,11 +19,10 @@ public class DatosUsuarioController : Controller
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al cargar la vista de inicio de sesión.");
             return BadRequest();
         }
     }
-
 
     [HttpPost]
     public IActionResult Login(UsuarioViewModel usuarioCargado)
@@ -35,6 +34,7 @@ public class DatosUsuarioController : Controller
             if (usuario == null)
             {
                 string accesoRechazado = "Intento de acceso invalido - Usuario: " + usuarioCargado.Usuario + " - Clave: " + usuarioCargado.Contrasenia;
+
                 Console.WriteLine(accesoRechazado);
                 ilogger.LogWarning(accesoRechazado);
 
@@ -42,6 +42,7 @@ public class DatosUsuarioController : Controller
             }
 
             string accesoExitoso = "El usuario " + usuario.Nombre + " ingreso correctamente";
+
             Console.WriteLine(accesoExitoso);
             ilogger.LogInformation(accesoExitoso);
 
@@ -52,7 +53,7 @@ public class DatosUsuarioController : Controller
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al intentar iniciar sesión.");
             return BadRequest();
         }
     }
@@ -63,11 +64,16 @@ public class DatosUsuarioController : Controller
         try
         {
             HttpContext.Session.Clear(); // Borra los datos de la sesión
+
+            string mensajeLogout = "Sesión cerrada correctamente.";
+            Console.WriteLine(mensajeLogout);
+            ilogger.LogInformation(mensajeLogout);
+
             return RedirectToAction("Index", "DatosUsuario");
         }
         catch (Exception ex)
         {
-            ilogger.LogError(ex.ToString());
+            ilogger.LogError(ex, "Error al cerrar sesión.");
             return BadRequest();
         }
     }

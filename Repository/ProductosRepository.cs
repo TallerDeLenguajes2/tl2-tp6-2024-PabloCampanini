@@ -2,14 +2,18 @@ using Microsoft.Data.Sqlite;
 
 public class ProductosRepository : IProductosRepository
 {
-    private const string connectionString = @"Data Source=db\Tienda.db;Cache=Shared";
-
+    private readonly string _ConnectionString;
+    public ProductosRepository(string ConnectionString)
+    {
+        _ConnectionString = ConnectionString;
+    }
+    
     public void CreateProducto(Productos producto)
     {
         try
         {
             string queryString = "INSERT INTO Productos (Descripcion, Precio) VALUES (@Descripcion, @Precio)";
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();
@@ -34,7 +38,7 @@ public class ProductosRepository : IProductosRepository
                                  "SET Descripcion = @Descripcion, Precio = @Precio " +
                                  "WHERE idProducto = @idBuscado";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();
@@ -65,7 +69,7 @@ public class ProductosRepository : IProductosRepository
 
             string queryString = "SELECT * FROM Productos";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();
@@ -107,7 +111,7 @@ public class ProductosRepository : IProductosRepository
 
             string queryString = "SELECT * FROM Productos WHERE idProducto = @idBuscado";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();
@@ -147,7 +151,7 @@ public class ProductosRepository : IProductosRepository
         {
             string queryString = "DELETE FROM Productos WHERE idProducto = @idBuscado";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();

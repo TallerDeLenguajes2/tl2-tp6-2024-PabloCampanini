@@ -2,7 +2,11 @@ using Microsoft.Data.Sqlite;
 
 public class DatosUsuarioRepository : IDatosUsuarioRepository
 {
-    private const string connectionString = @"Data Source=db\Tienda.db;Cache=Shared";
+    private readonly string _ConnectionString;
+    public DatosUsuarioRepository(string ConnectionString)
+    {
+        _ConnectionString = ConnectionString;
+    }
 
     public void CreateUsuario(DatosUsuario usuario)
     {
@@ -11,7 +15,7 @@ public class DatosUsuarioRepository : IDatosUsuarioRepository
             string queryString = @"INSERT INTO Usuarios (Nombre, Usuario, Contraseña, Rol)
                                 VALUES (@Nombre, @Usuario, @Contraseña, @Rol)";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
 
@@ -38,7 +42,7 @@ public class DatosUsuarioRepository : IDatosUsuarioRepository
             DatosUsuario usuario = null;
             string queryString = @"SELECT * FROM Usuarios WHERE idUsuario = @idBuscado";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
@@ -81,7 +85,7 @@ public class DatosUsuarioRepository : IDatosUsuarioRepository
             List<DatosUsuario> ListaUsuarios = new List<DatosUsuario>();
             string queryString = @"SELECT * FROM Usuarios";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();
@@ -123,7 +127,7 @@ public class DatosUsuarioRepository : IDatosUsuarioRepository
                                      Rol = @Rol
                                  WHERE idUsuario = @idBuscado";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();
@@ -154,7 +158,7 @@ public class DatosUsuarioRepository : IDatosUsuarioRepository
         {
             string queryString = @"DELETE FROM Usuarios WHERE idUsuario = @idBuscado";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();

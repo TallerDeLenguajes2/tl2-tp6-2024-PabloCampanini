@@ -2,7 +2,11 @@ using Microsoft.Data.Sqlite;
 
 public class PresupuestosRepository : IPresupuestosRepository
 {
-    private const string connectionString = @"Data Source=db\Tienda.db;Cache=Shared";
+    private readonly string _ConnectionString;
+    public PresupuestosRepository(string ConnectionString)
+    {
+        _ConnectionString = ConnectionString;
+    }
 
     public void CreatePresupuesto(Presupuestos presupuestoNuevo)
     {
@@ -11,7 +15,7 @@ public class PresupuestosRepository : IPresupuestosRepository
             string queryString = "INSERT INTO Presupuestos (NombreDestinatario, FechaCreacion) " +
                                  "VALUES (@NombreDestinatario, @FechaCreacion);";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
 
@@ -36,7 +40,7 @@ public class PresupuestosRepository : IPresupuestosRepository
             string queryString = "SELECT * FROM Presupuestos;";
             List<Presupuestos> ListaPresupuestos = new List<Presupuestos>();
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();
@@ -79,7 +83,7 @@ public class PresupuestosRepository : IPresupuestosRepository
 
             Presupuestos pres = null;
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
@@ -135,7 +139,7 @@ public class PresupuestosRepository : IPresupuestosRepository
             string queryString = @"INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, cantidad)
                                  VALUES (@idBuscado, @idProducto, @Cantidad);";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 SqliteCommand command = new SqliteCommand(queryString, connection);
                 connection.Open();
@@ -160,7 +164,7 @@ public class PresupuestosRepository : IPresupuestosRepository
             string queryStringDetalle = "DELETE FROM PresupuestosDetalle WHERE idPresupuesto = @idBuscado;";
             string queryStringPresupuesto = "DELETE FROM Presupuestos WHERE idPresupuesto = @idBuscado;";
 
-            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            using (SqliteConnection connection = new SqliteConnection(_ConnectionString))
             {
                 connection.Open();
 

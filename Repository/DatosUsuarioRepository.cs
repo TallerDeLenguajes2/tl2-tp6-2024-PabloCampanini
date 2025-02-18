@@ -6,130 +6,172 @@ public class DatosUsuarioRepository : IDatosUsuarioRepository
 
     public void CreateUsuario(DatosUsuario usuario)
     {
-        string queryString = @"INSERT INTO Usuarios (Nombre, Usuario, Contraseña, Rol)
-                            VALUES (@Nombre, @Usuario, @Contraseña, @Rol)";
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            string queryString = @"INSERT INTO Usuarios (Nombre, Usuario, Contraseña, Rol)
+                                VALUES (@Nombre, @Usuario, @Contraseña, @Rol)";
 
-            connection.Open();
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            {
+                SqliteCommand command = new SqliteCommand(queryString, connection);
 
-            command.Parameters.Add(new SqliteParameter("@Nombre", usuario.Nombre));
-            command.Parameters.Add(new SqliteParameter("@Usuario", usuario.Usuario));
-            command.Parameters.Add(new SqliteParameter("@Contraseña", usuario.Contrasenia));
-            command.Parameters.Add(new SqliteParameter("@Rol", usuario.Rol));
+                connection.Open();
 
-            command.ExecuteNonQuery();
+                command.Parameters.Add(new SqliteParameter("@Nombre", usuario.Nombre));
+                command.Parameters.Add(new SqliteParameter("@Usuario", usuario.Usuario));
+                command.Parameters.Add(new SqliteParameter("@Contraseña", usuario.Contrasenia));
+                command.Parameters.Add(new SqliteParameter("@Rol", usuario.Rol));
 
-            connection.Close();
+                command.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error al crear el usuario.", ex);
         }
     }
 
     public DatosUsuario GetUsuarioById(int idBuscado)
     {
-        DatosUsuario usuario = new DatosUsuario();
-
-        string queryString = @"SELECT * FROM Usuarios WHERE idUsuario = @idBuscado";
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            DatosUsuario usuario = null;
+            string queryString = @"SELECT * FROM Usuarios WHERE idUsuario = @idBuscado";
 
-            connection.Open();
-
-            command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
-
-            using (SqliteDataReader reader = command.ExecuteReader())
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
-                usuario.IdUsuario = Convert.ToInt32(reader["idUsuario"]);
-                usuario.Nombre = Convert.ToString(reader["Nombre"]);
-                usuario.Usuario = Convert.ToString(reader["Usuario"]);
-                usuario.Contrasenia = Convert.ToString(reader["Contraseña"]);
-                usuario.Rol = Convert.ToString(reader["Rol"]);
+                SqliteCommand command = new SqliteCommand(queryString, connection);
+                command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+
+                connection.Open();
+
+                using (SqliteDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.Read())
+                    {
+                        usuario = new DatosUsuario
+                        {
+                            IdUsuario = Convert.ToInt32(reader["idUsuario"]),
+                            Nombre = Convert.ToString(reader["Nombre"]),
+                            Usuario = Convert.ToString(reader["Usuario"]),
+                            Contrasenia = Convert.ToString(reader["Contraseña"]),
+                            Rol = Convert.ToString(reader["Rol"])
+                        };
+                    }
+                }
             }
 
-            connection.Close();
-        }
+            if (usuario == null)
+            {
+                throw new Exception($"No se encontró el usuario con ID {idBuscado}.");
+            }
 
-        return usuario;
+            return usuario;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error al obtener el usuario con ID {idBuscado}.", ex);
+        }
     }
 
     public List<DatosUsuario> GetAllUsuarios()
     {
-        List<DatosUsuario> ListaUsuarios = new List<DatosUsuario>();
-
-        string queryString = @"SELECT * FROM Usuarios";
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            List<DatosUsuario> ListaUsuarios = new List<DatosUsuario>();
+            string queryString = @"SELECT * FROM Usuarios";
 
-            connection.Open();
-
-            using (SqliteDataReader reader = command.ExecuteReader())
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
-                while (reader.Read())
+                SqliteCommand command = new SqliteCommand(queryString, connection);
+                connection.Open();
+
+                using (SqliteDataReader reader = command.ExecuteReader())
                 {
-                    DatosUsuario usuario = new DatosUsuario();
+                    while (reader.Read())
+                    {
+                        DatosUsuario usuario = new DatosUsuario
+                        {
+                            IdUsuario = Convert.ToInt32(reader["idUsuario"]),
+                            Nombre = Convert.ToString(reader["Nombre"]),
+                            Usuario = Convert.ToString(reader["Usuario"]),
+                            Contrasenia = Convert.ToString(reader["Contraseña"]),
+                            Rol = Convert.ToString(reader["Rol"])
+                        };
 
-                    usuario.IdUsuario = Convert.ToInt32(reader["idUsuario"]);
-                    usuario.Nombre = Convert.ToString(reader["Nombre"]);
-                    usuario.Usuario = Convert.ToString(reader["Usuario"]);
-                    usuario.Contrasenia = Convert.ToString(reader["Contraseña"]);
-                    usuario.Rol = Convert.ToString(reader["Rol"]);
-
-                    ListaUsuarios.Add(usuario);
+                        ListaUsuarios.Add(usuario);
+                    }
                 }
             }
 
-            connection.Close();
+            return ListaUsuarios;
         }
-
-        return ListaUsuarios;
+        catch (Exception ex)
+        {
+            throw new Exception("Error al obtener la lista de usuarios.", ex);
+        }
     }
 
     public void UpdateDatosUsuario(int idBuscado, DatosUsuario usuario)
     {
-        string queryString = @"UPDATE Usuarios
-                             SET Nombre = @Nombre, 
-                                 Usuario = @Usuario,
-                                 Contraseña = @Contraseña,
-                                 Rol = @Rol
-                             WHERE idUsuario = @idBuscado";
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            string queryString = @"UPDATE Usuarios
+                                 SET Nombre = @Nombre, 
+                                     Usuario = @Usuario,
+                                     Contraseña = @Contraseña,
+                                     Rol = @Rol
+                                 WHERE idUsuario = @idBuscado";
 
-            connection.Open();
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            {
+                SqliteCommand command = new SqliteCommand(queryString, connection);
+                connection.Open();
 
-            command.Parameters.Add(new SqliteParameter("@Nombre", usuario.Nombre));
-            command.Parameters.Add(new SqliteParameter("@Usuario", usuario.Usuario));
-            command.Parameters.Add(new SqliteParameter("@Contraseña", usuario.Contrasenia));
-            command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+                command.Parameters.Add(new SqliteParameter("@Nombre", usuario.Nombre));
+                command.Parameters.Add(new SqliteParameter("@Usuario", usuario.Usuario));
+                command.Parameters.Add(new SqliteParameter("@Contraseña", usuario.Contrasenia));
+                command.Parameters.Add(new SqliteParameter("@Rol", usuario.Rol));
+                command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
 
-            command.ExecuteNonQuery();
+                int rowsAffected = command.ExecuteNonQuery();
 
-            connection.Close();
+                if (rowsAffected == 0)
+                {
+                    throw new Exception($"No se encontró el usuario con ID {idBuscado} para actualizar.");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error al actualizar el usuario con ID {idBuscado}.", ex);
         }
     }
 
     public void DeleteDatosUsuario(int idBuscado)
     {
-        string queryString = @"DELETE FROM Usuarios WHERE idUsuario = @idBuscado";
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            string queryString = @"DELETE FROM Usuarios WHERE idUsuario = @idBuscado";
 
-            connection.Open();
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            {
+                SqliteCommand command = new SqliteCommand(queryString, connection);
+                connection.Open();
 
-            command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+                command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
 
-            command.ExecuteNonQuery();
+                int rowsAffected = command.ExecuteNonQuery();
 
-            connection.Close();
+                if (rowsAffected == 0)
+                {
+                    throw new Exception($"No se encontró el usuario con ID {idBuscado} para eliminar.");
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error al eliminar el usuario con ID {idBuscado}.", ex);
         }
     }
 }

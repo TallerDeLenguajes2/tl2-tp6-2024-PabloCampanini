@@ -6,147 +6,180 @@ public class PresupuestosRepository : IPresupuestosRepository
 
     public void CreatePresupuesto(Presupuestos presupuestoNuevo)
     {
-        string queryString = "INSERT INTO Presupuestos (NombreDestinatario, FechaCreacion) " +
-                             "VALUES (@NombreDestinatario, @FechaCreacion);";
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            string queryString = "INSERT INTO Presupuestos (NombreDestinatario, FechaCreacion) " +
+                                 "VALUES (@NombreDestinatario, @FechaCreacion);";
 
-            connection.Open();
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            {
+                SqliteCommand command = new SqliteCommand(queryString, connection);
 
-            command.Parameters.Add(new SqliteParameter("@NombreDestinatario", presupuestoNuevo.NombreDestinatario));
-            command.Parameters.Add(new SqliteParameter("@FechaCreacion", presupuestoNuevo.FechaCreacion));
+                connection.Open();
 
-            command.ExecuteNonQuery();
+                command.Parameters.Add(new SqliteParameter("@NombreDestinatario", presupuestoNuevo.NombreDestinatario));
+                command.Parameters.Add(new SqliteParameter("@FechaCreacion", presupuestoNuevo.FechaCreacion));
 
-            connection.Close();
+                command.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Error al crear el presupuesto.", ex);
         }
     }
 
     public List<Presupuestos> GetAllPresupuestos()
     {
-        string queryString = "SELECT * FROM Presupuestos;";
-
-        List<Presupuestos> ListaPresupuestos = new List<Presupuestos>();
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            string queryString = "SELECT * FROM Presupuestos;";
+            List<Presupuestos> ListaPresupuestos = new List<Presupuestos>();
 
-            connection.Open();
-
-            using (SqliteDataReader reader = command.ExecuteReader())
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
-                while (reader.Read())
+                SqliteCommand command = new SqliteCommand(queryString, connection);
+                connection.Open();
+
+                using (SqliteDataReader reader = command.ExecuteReader())
                 {
-                    Presupuestos pres = new Presupuestos();
+                    while (reader.Read())
+                    {
+                        Presupuestos pres = new Presupuestos
+                        {
+                            IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]),
+                            NombreDestinatario = Convert.ToString(reader["NombreDestinatario"]),
+                            FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"])
+                        };
 
-                    pres.IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]);
-                    pres.NombreDestinatario = Convert.ToString(reader["NombreDestinatario"]);
-                    pres.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);
-
-                    ListaPresupuestos.Add(pres);
+                        ListaPresupuestos.Add(pres);
+                    }
                 }
             }
 
-            connection.Close();
+            return ListaPresupuestos;
         }
-
-        return ListaPresupuestos;
+        catch (Exception ex)
+        {
+            throw new Exception("Error al obtener la lista de presupuestos.", ex);
+        }
     }
 
     public Presupuestos GetDetalleDePresupuesto(int idBuscado)
     {
-        string queryString = @"SELECT  p.idPresupuesto as idPresupuesto, p.NombreDestinatario,p.FechaCreacion,pre.idProducto as idProducto, pre.Cantidad,pro.Descripcion, pro.Precio FROM Presupuestos AS p 
-                            INNER JOIN PresupuestosDetalle AS pre ON p.idPresupuesto = pre.idPresupuesto 
-                            INNER JOIN Productos AS pro ON pre.idProducto = pro.idProducto 
-                            WHERE p.idPresupuesto = @idBuscado;";
-
-        Presupuestos pres = new Presupuestos();
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            string queryString = @"SELECT p.idPresupuesto, p.NombreDestinatario, p.FechaCreacion, 
+                                          pre.idProducto, pre.Cantidad, 
+                                          pro.Descripcion, pro.Precio 
+                                   FROM Presupuestos AS p 
+                                   INNER JOIN PresupuestosDetalle AS pre ON p.idPresupuesto = pre.idPresupuesto 
+                                   INNER JOIN Productos AS pro ON pre.idProducto = pro.idProducto 
+                                   WHERE p.idPresupuesto = @idBuscado;";
 
-            connection.Open();
-            
-            command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+            Presupuestos pres = null;
 
-            using (SqliteDataReader reader = command.ExecuteReader())
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
             {
-                while (reader.Read())
+                SqliteCommand command = new SqliteCommand(queryString, connection);
+                command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+
+                connection.Open();
+
+                using (SqliteDataReader reader = command.ExecuteReader())
                 {
-                    Productos prod = new Productos();
+                    while (reader.Read())
+                    {
+                        if (pres == null)
+                        {
+                            pres = new Presupuestos
+                            {
+                                IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]),
+                                NombreDestinatario = Convert.ToString(reader["NombreDestinatario"]),
+                                FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"])
+                            };
+                        }
 
-                    prod.IdProducto = Convert.ToInt32(reader["idProducto"]);
-                    prod.Descripcion = Convert.ToString(reader["Descripcion"]);
-                    prod.Precio = Convert.ToInt32(reader["Precio"]);
+                        Productos prod = new Productos
+                        {
+                            IdProducto = Convert.ToInt32(reader["idProducto"]),
+                            Descripcion = Convert.ToString(reader["Descripcion"]),
+                            Precio = Convert.ToInt32(reader["Precio"])
+                        };
 
-                    PresupuestosDetalle prodDet = new PresupuestosDetalle();
+                        PresupuestosDetalle prodDet = new PresupuestosDetalle();
+                        prodDet.CargarProducto(Convert.ToInt32(reader["Cantidad"]), prod);
 
-                    int cantidad = Convert.ToInt32(reader["Cantidad"]);
-                    prodDet.CargarProducto(cantidad, prod);
-
-
-                    pres.IdPresupuesto = Convert.ToInt32(reader["idPresupuesto"]);
-                    pres.NombreDestinatario = Convert.ToString(reader["NombreDestinatario"]);
-                    pres.FechaCreacion = Convert.ToDateTime(reader["FechaCreacion"]);
-                    pres.AgregarDetalle(prodDet);
+                        pres.AgregarDetalle(prodDet);
+                    }
                 }
             }
-        }
 
-        return pres;
+            if (pres == null)
+            {
+                throw new Exception($"No se encontró el presupuesto con ID {idBuscado}");
+            }
+
+            return pres;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error al obtener los detalles del presupuesto con ID {idBuscado}.", ex);
+        }
     }
 
     public void UpdatePresupuesto(int idBuscado, int idProducto, int cantidad)
     {
-        string queryString = @"INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, cantidad)
-                             VALUES (@idBuscado, @idProducto, @Cantidad);";
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand command = new SqliteCommand(queryString, connection);
+            string queryString = @"INSERT INTO PresupuestosDetalle (idPresupuesto, idProducto, cantidad)
+                                 VALUES (@idBuscado, @idProducto, @Cantidad);";
 
-            connection.Open();
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            {
+                SqliteCommand command = new SqliteCommand(queryString, connection);
+                connection.Open();
 
-            command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
-            command.Parameters.Add(new SqliteParameter("@idProducto", idProducto));
-            command.Parameters.Add(new SqliteParameter("@Cantidad", cantidad));
+                command.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+                command.Parameters.Add(new SqliteParameter("@idProducto", idProducto));
+                command.Parameters.Add(new SqliteParameter("@Cantidad", cantidad));
 
-            command.ExecuteNonQuery();
-
-            connection.Close();
+                command.ExecuteNonQuery();
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error al actualizar el presupuesto con ID {idBuscado}.", ex);
         }
     }
 
     public void DeletePresupuesto(int idBuscado)
     {
-        string queryStringDetalle = "DELETE FROM PresupuestosDetalle " +
-                                    "WHERE idPresupuesto = @idBuscado;";
-
-        string queryStringPresupuesto = "DELETE FROM Presupuestos " +
-                                        "WHERE idPresupuesto = @idBuscado;";
-
-        using (SqliteConnection connection = new SqliteConnection(connectionString))
+        try
         {
-            SqliteCommand commandDetalle = new SqliteCommand(queryStringDetalle, connection);
+            string queryStringDetalle = "DELETE FROM PresupuestosDetalle WHERE idPresupuesto = @idBuscado;";
+            string queryStringPresupuesto = "DELETE FROM Presupuestos WHERE idPresupuesto = @idBuscado;";
 
-            connection.Open();
+            using (SqliteConnection connection = new SqliteConnection(connectionString))
+            {
+                connection.Open();
 
-            commandDetalle.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+                using (SqliteCommand commandDetalle = new SqliteCommand(queryStringDetalle, connection))
+                {
+                    commandDetalle.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+                    commandDetalle.ExecuteNonQuery();
+                }
 
-            commandDetalle.ExecuteNonQuery();
-
-
-            SqliteCommand commandPresupuesto = new SqliteCommand(queryStringPresupuesto, connection);
-
-            commandPresupuesto.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
-
-            commandPresupuesto.ExecuteNonQuery();
-
-            connection.Close();
+                using (SqliteCommand commandPresupuesto = new SqliteCommand(queryStringPresupuesto, connection))
+                {
+                    commandPresupuesto.Parameters.Add(new SqliteParameter("@idBuscado", idBuscado));
+                    commandPresupuesto.ExecuteNonQuery();
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Error al eliminar el presupuesto con ID {idBuscado}.", ex);
         }
     }
 }

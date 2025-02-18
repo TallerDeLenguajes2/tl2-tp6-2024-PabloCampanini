@@ -2,40 +2,73 @@ using Microsoft.AspNetCore.Mvc;
 
 public class DatosUsuarioController : Controller
 {
-    IDatosUsuarioRepository usuarioRep;
+    private readonly IDatosUsuarioRepository usuarioRep;
+    private readonly ILogger<DatosUsuarioController> ilogger;
 
-    public DatosUsuarioController(IDatosUsuarioRepository usuarioRepository)
+    public DatosUsuarioController(IDatosUsuarioRepository usuarioRepository, ILogger<DatosUsuarioController> logger)
     {
         usuarioRep = usuarioRepository;
+        ilogger = logger;
     }
 
     public IActionResult Index()
     {
-        return View(new UsuarioViewModel());
+        try
+        {
+            return View(new UsuarioViewModel());
+        }
+        catch (Exception ex)
+        {
+            ilogger.LogError(ex.ToString());
+            return BadRequest();
+        }
     }
+
 
     [HttpPost]
     public IActionResult Login(UsuarioViewModel usuarioCargado)
     {
-        var usuario = usuarioRep.GetAllUsuarios().FirstOrDefault(u => u.Usuario == usuarioCargado.Usuario && u.Contrasenia == usuarioCargado.Contrasenia);
-
-        if (usuario == null)
+        try
         {
-            ViewBag.Error = "Debe ingresar datos validos";
+            var usuario = usuarioRep.GetAllUsuarios().FirstOrDefault(u => u.Usuario == usuarioCargado.Usuario && u.Contrasenia == usuarioCargado.Contrasenia);
 
-            return View(usuarioCargado);
+            if (usuario == null)
+            {
+                string accesoRechazado = "Intento de acceso invalido - Usuario: " + usuarioCargado.Usuario + " - Clave: " + usuarioCargado.Contrasenia;
+                Console.WriteLine(accesoRechazado);
+                ilogger.LogWarning(accesoRechazado);
+
+                return View(usuarioCargado);
+            }
+
+            string accesoExitoso = "El usuario " + usuario.Nombre + " ingreso correctamente";
+            Console.WriteLine(accesoExitoso);
+            ilogger.LogInformation(accesoExitoso);
+
+            HttpContext.Session.SetInt32("idIngresado", usuario.IdUsuario);
+            HttpContext.Session.SetString("rol", usuario.Rol);
+
+            return RedirectToAction("Index", "Home");
         }
-
-        HttpContext.Session.SetInt32("idIngresado", usuario.IdUsuario);
-        HttpContext.Session.SetString("rol", usuario.Rol);
-
-        return RedirectToAction("Index", "Home");
+        catch (Exception ex)
+        {
+            ilogger.LogError(ex.ToString());
+            return BadRequest();
+        }
     }
 
     [HttpGet]
     public IActionResult Logout()
     {
-        HttpContext.Session.Clear(); // Borra los datos de la sesión
-        return RedirectToAction("Index", "DatosUsuario");
+        try
+        {
+            HttpContext.Session.Clear(); // Borra los datos de la sesión
+            return RedirectToAction("Index", "DatosUsuario");
+        }
+        catch (Exception ex)
+        {
+            ilogger.LogError(ex.ToString());
+            return BadRequest();
+        }
     }
 }
